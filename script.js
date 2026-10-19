@@ -9,6 +9,9 @@ import { cancelNoteAutosave, flushNotes, initNotesUI, refreshNotesUI } from './j
 import { refreshProgressUI } from './js/ui-progress.js';
 import { applyTheme, initSettingsUI, refreshSettingsUI } from './js/ui-settings.js';
 import { initEyeUI, refreshEyeUI } from './js/ui-eye.js';
+import { initTranslationSettingsUI, refreshTranslationUI } from './js/ui-translate-settings.js';
+import { initPlannerUI, refreshPlannerUI } from './js/ui-planner.js';
+import { initRecommendationsUI, refreshRecommendationsUI } from './js/ui-recommendations.js';
 import {
   initTasksUI,
   loadTasksUI,
@@ -54,7 +57,7 @@ function hideBanner() {
 
 const modules = {
   focus: { started: false, refresh: refreshFocusUI },
-  eye: { started: false, refresh: refreshEyeUI },
+  eye: { started: false, refresh: refreshEyeUI },     recommendations: { started: false, refresh: refreshRecommendationsUI }, translation: { started: false, refresh: refreshTranslationUI },
   notes: { started: false, refresh: refreshNotesUI },
   progress: { started: false, refresh: refreshProgressUI },
   settings: { started: false, refresh: refreshSettingsUI },
@@ -87,6 +90,8 @@ async function performFullReset() {
     refreshModule('notes'),
     refreshModule('focus'),
     refreshModule('eye'),
+    refreshModule('translation'),
+    refreshModule('planner'),
     refreshModule('progress'),
     refreshModule('settings'),
   ]);
@@ -101,6 +106,9 @@ async function startModules() {
   await startModule('notes', () => initNotesUI(moduleContext));
   await startModule('progress', () => refreshProgressUI());
   await startModule('settings', () => initSettingsUI(moduleContext));
+  await startModule('translation', () => initTranslationSettingsUI(moduleContext));
+  await startModule('planner', () => initPlannerUI(moduleContext));
+    await startModule('recommendations', () => initRecommendationsUI());
 }
 
 /* ================================================================== */
@@ -128,6 +136,8 @@ function activateTab(tabId, { moveFocus = false } = {}) {
   if (tabId === 'focus') void refreshModule('focus');
   if (tabId === 'progress') void refreshModule('progress');
   if (tabId === 'eye') void refreshModule('eye');
+  if (tabId === 'planner') void refreshModule('planner');
+    if (tabId === 'focus') void refreshModule('recommendations');
 }
 
 function toggleSettings() {

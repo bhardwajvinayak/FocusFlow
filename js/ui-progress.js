@@ -2,6 +2,7 @@
 // Progress tab UI. All numbers come from statistics.js (derived from stored data).
 
 import { loadStats } from './statistics.js';
+import { refreshCoachUI } from './ui-coach.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -50,6 +51,7 @@ function render(stats) {
 export async function refreshProgressUI() {
   try {
     render(await loadStats());
+    void refreshCoachUI(); // independent: a coach problem never breaks the statistics
     els.error.hidden = true;
   } catch (error) {
     console.error('[FocusFlow] Could not load statistics:', error);

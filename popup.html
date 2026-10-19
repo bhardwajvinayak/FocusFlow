@@ -24,6 +24,8 @@
     <nav class="tabs" role="tablist" aria-label="FocusFlow sections">
       <button id="tab-tasks" class="tab" role="tab" type="button" data-tab="tasks"
               aria-selected="true" aria-controls="panel-tasks" tabindex="0">Tasks</button>
+                    <button id="tab-planner" class="tab" role="tab" type="button" data-tab="planner"
+              aria-selected="false" aria-controls="panel-planner" tabindex="-1">Planner</button>
       <button id="tab-focus" class="tab" role="tab" type="button" data-tab="focus"
               aria-selected="false" aria-controls="panel-focus" tabindex="-1">Focus</button>
       <button id="tab-notes" class="tab" role="tab" type="button" data-tab="notes"
@@ -124,6 +126,65 @@
           <p id="task-empty-text"></p>
         </div>
       </section>
+            <!-- ============ Planner ============ -->
+      <section id="panel-planner" class="panel" role="tabpanel" aria-labelledby="tab-planner" hidden>
+        <h2 class="panel-heading">Daily planner</h2>
+        <p class="field-hint">
+          Builds a suggested schedule from your pending tasks using fixed rules: overdue first, then nearer
+          deadlines, then higher priority. It only proposes a plan. Nothing is saved, and your tasks are never changed.
+        </p>
+
+        <form id="planner-form" novalidate>
+          <div class="planner-grid">
+            <label for="pl-start">Start time</label>
+            <input id="pl-start" class="text-input" type="time" />
+            <label for="pl-available">Available time</label>
+            <div class="planner-inline">
+              <input id="pl-available" class="text-input" type="number" min="1" step="any" inputmode="decimal" />
+              <select id="pl-unit" class="text-input" aria-label="Unit for available time">
+                <option value="minutes">minutes</option>
+                <option value="hours">hours</option>
+              </select>
+            </div>
+            <label for="pl-session">Longest work session (min)</label>
+            <input id="pl-session" class="text-input" type="number" inputmode="numeric" />
+            <label for="pl-break">Break between sessions (min)</label>
+            <input id="pl-break" class="text-input" type="number" inputmode="numeric" />
+            <label for="pl-default">Default task length (min)</label>
+            <input id="pl-default" class="text-input" type="number" inputmode="numeric" />
+          </div>
+
+          <details class="task-more">
+            <summary>Adjust task estimates (optional)</summary>
+            <p class="field-hint">
+              Tasks have no duration of their own, so each one uses the default length unless you enter an estimate
+              here (5 to 480 minutes). These estimates are not saved: they are forgotten when you close FocusFlow.
+            </p>
+            <ul id="pl-estimates" class="planner-estimates" aria-label="Task estimates"></ul>
+          </details>
+
+          <p id="planner-error" class="field-error" role="alert" hidden></p>
+          <div class="planner-actions">
+            <button id="planner-generate" class="btn btn-primary" type="submit">Generate plan</button>
+            <button id="planner-copy" class="btn" type="button" hidden>Copy plan as text</button>
+          </div>
+        </form>
+
+        <p id="planner-status" class="field-hint" role="status" aria-live="polite"></p>
+
+        <div id="planner-empty" class="empty-state" hidden>
+          <h2 id="planner-empty-title">No pending tasks to plan</h2>
+          <p id="planner-empty-text"></p>
+        </div>
+
+        <div id="planner-result" hidden>
+          <p id="planner-summary" class="planner-summary"></p>
+          <ol id="planner-blocks" class="planner-blocks" aria-label="Proposed schedule"></ol>
+          <h3 id="planner-unscheduled-heading" class="stat-heading" hidden>Not scheduled</h3>
+          <ul id="planner-unscheduled" class="planner-unscheduled" aria-label="Tasks that did not fit"></ul>
+          <p id="planner-notes" class="field-hint"></p>
+        </div>
+      </section>
 
       <!-- ============ Focus ============ -->
       <section id="panel-focus" class="panel" role="tabpanel" aria-labelledby="tab-focus" hidden>
@@ -147,6 +208,26 @@
 
         <p id="timer-cycle" class="timer-meta"></p>
         <p id="timer-today" class="timer-meta"></p>
+        
+        <div id="rec-card" class="coach-card rec-card" role="region" aria-labelledby="rec-heading">
+          <h3 id="rec-heading" class="coach-heading">Next up</h3>
+          <p class="field-hint">
+            A suggestion from fixed rules, using your own tasks, deadlines and timer settings. It never starts the
+            timer or changes your tasks.
+          </p>
+          <p id="rec-empty" class="coach-empty" hidden></p>
+          <div id="rec-next" hidden>
+            <p id="rec-title" class="rec-title"></p>
+            <p id="rec-meta" class="rec-meta"></p>
+            <ul id="rec-reasons" class="rec-list" aria-label="Why this task"></ul>
+          </div>
+          <h4 id="rec-also-heading" class="coach-sub" hidden>Also consider</h4>
+          <ul id="rec-also" class="rec-list" aria-label="Other tasks to consider"></ul>
+          <p id="rec-session" class="coach-rec rec-session" hidden></p>
+          <p id="rec-break" class="field-hint" hidden></p>
+          <ul id="rec-notes" class="rec-list rec-notes" aria-label="Notes"></ul>
+          <p id="rec-error" class="field-error" role="alert" hidden></p>
+        </div>
       </section>
 
       <!-- ============ Notes ============ -->
@@ -189,7 +270,21 @@
       </section>
 
       <!-- ============ Progress ============ -->
-      <section id="panel-progress" class="panel" role="tabpanel" aria-labelledby="tab-progress" hidden>
+      <section id="panel-progress" class="panel" role="tabpanel" aria-labelledby="tab-progress" hidden>        <div id="coach-card" class="coach-card" role="region" aria-labelledby="coach-heading">
+          <h3 id="coach-heading" class="coach-heading">Coach</h3>
+          <p class="field-hint">
+            Suggestions are calculated on this device from your own tasks and focus sessions, using fixed rules.
+            They are not a measurement of how productive you are.
+          </p>
+          <p id="coach-empty" class="coach-empty" hidden></p>
+          <ul id="coach-recs" class="coach-recs" aria-label="Suggestions"></ul>
+          <h4 class="coach-sub">Today</h4>
+          <ul id="coach-indicators" class="coach-indicators" aria-label="Today in numbers"></ul>
+          <h4 class="coach-sub">This week</h4>
+          <p id="coach-weekly-note" class="field-hint"></p>
+          <ul id="coach-weekly" class="coach-weekly" aria-label="Last seven days"></ul>
+          <p id="coach-error" class="field-error" role="alert" hidden></p>
+        </div>
         <p id="progress-empty" class="empty-hint" hidden>
           No activity yet. Add tasks or finish a focus session and your progress will appear here.
         </p>
@@ -309,7 +404,27 @@
           <p id="settings-error" class="field-error" role="alert" hidden></p>
           <button id="settings-save" class="btn btn-primary" type="submit">Save settings</button>
         </form>
-
+        <fieldset class="eye-group">
+          <legend>Translation (English to Hindi)</legend>
+          <p class="field-hint">
+            Right-click selected text and choose "Translate to Hindi". The selected text is sent to MyMemory,
+            a third-party service (api.mymemory.translated.net). The free service has a daily limit and
+            accepts up to 500 bytes per request. FocusFlow does not store or log your text.
+          </p>
+          <label class="switch-row" for="tr-float-toggle">
+            <input id="tr-float-toggle" type="checkbox" />
+            <span>Show a Translate button near selected text</span>
+          </label>
+          <p id="tr-float-status" class="field-hint" role="status" aria-live="polite"></p>
+          <p id="tr-float-error" class="field-error" role="alert" hidden></p>
+          <p class="field-hint">
+            Optional. Turning it on asks Chrome for access to all websites, because the button must be able to
+            see your text selection on any page. It never reads anything else, never appears over form fields,
+            and sends text only when you click it (or press Alt+Shift+H). Turning it off removes that access.
+          </p>
+          <p id="tr-consent-status" class="field-hint"></p>
+          <button id="tr-consent-reset" class="btn btn-small" type="button" hidden>Show the privacy notice again</button>
+        </fieldset>
         <div class="danger-zone">
           <h3>Reset all data</h3>
           <p class="field-hint">

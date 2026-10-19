@@ -21,3 +21,7 @@ export const BREAK_ALARM_NAME = 'focusflow-break-reminder';
 
 // In DEV_MODE the reminder repeats this often (minutes) so it can be tested quickly.
 export const DEV_REMINDER_MINUTES = 1;
+
+// Translation (context menu).
+export const TRANSLATE_MENU_ID = 'focusflow-translate-hi';
+export const TRANSLATE_MENU_TITLE = 'Translate to Hindi';

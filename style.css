@@ -997,3 +997,291 @@ progress:focus-visible {
   font-size: 12px;
   color: var(--muted);
 }
+/* ================================================================== */
+/* Phase 4: Coach card                                                 */
+/* ================================================================== */
+
+.coach-card {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.coach-heading {
+  margin: 0 0 2px;
+  font-size: 15px;
+}
+
+.coach-sub {
+  margin: 10px 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.coach-empty {
+  margin: 6px 0;
+  padding: 6px 8px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.coach-recs,
+.coach-indicators,
+.coach-weekly {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coach-recs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.coach-rec {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent-soft);
+}
+
+.coach-rec-text {
+  overflow-wrap: anywhere;
+}
+
+.coach-rec-reason {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.coach-indicator,
+.coach-week-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.coach-week-compare {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+/* ================================================================== */
+/* Phase 5: Daily planner                                              */
+/* ================================================================== */
+
+/* Six tabs now share the row. */
+.tab {
+  font-size: 12px;
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.planner-inline {
+  display: flex;
+  gap: 4px;
+}
+
+.planner-inline .text-input {
+  min-width: 0;
+}
+
+.planner-inline select.text-input {
+  flex: none;
+  width: 78px;
+}
+
+.planner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.planner-estimates {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 160px;
+  margin: 6px 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.planner-estimate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planner-estimate-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.planner-estimate .planner-estimate-input {
+  flex: none;
+  width: 80px;
+}
+
+.planner-summary {
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.planner-blocks,
+.planner-unscheduled {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.planner-block,
+.planner-skipped {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 2px 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.planner-block[data-priority="high"] {
+  border-left-color: var(--danger);
+}
+
+.planner-block[data-priority="low"] {
+  border-left-color: var(--border);
+}
+
+.planner-time {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.planner-title {
+  overflow-wrap: anywhere;
+}
+
+.planner-meta {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.planner-flag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.planner-part {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.planner-break {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 8px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  font-size: 12px;
+}
+
+.planner-skipped {
+  grid-template-columns: 1fr;
+  border-left-color: var(--warning);
+}
+
+.planner-skipped .planner-meta {
+  grid-column: 1;
+}
+
+.planner-reason {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.planner-none {
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+/* ================================================================== */
+/* Phase 7: Next-up recommendation card                                */
+/* ================================================================== */
+
+.rec-card {
+  margin-top: 14px;
+}
+
+.rec-title {
+  margin: 6px 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.rec-meta {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.rec-list {
+  margin: 0 0 6px;
+  padding-left: 18px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.rec-reason {
+  margin: 1px 0;
+}
+
+.rec-session {
+  margin: 8px 0 4px;
+  font-weight: 600;
+}
+
+.rec-notes {
+  color: var(--muted);
+  font-size: 12px;
+}

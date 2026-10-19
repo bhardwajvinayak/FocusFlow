@@ -163,3 +163,49 @@ Browser notifications, keyboard shortcuts, JSON export/import, weekly charts, ne
 All code is original. No third-party libraries, fonts or icons are used. The icon generator writes simple placeholder PNGs.
 
 Licensed under the MIT License (see `LICENSE`).
+## Translation (English to Hindi)
+Right-click selected English text and choose "Translate to Hindi". An optional floating Translate
+button (Settings, off by default) shows near selected text.
+
+**Third-party disclosure:** selected text is sent over HTTPS to MyMemory (api.mymemory.translated.net).
+FocusFlow does not store or log selected or translated text. Free quota (per MyMemory's published limits):
+5,000 characters/day anonymously, 500 bytes per request. Review MyMemory's Terms of Service before distributing.
+
+**Permissions added:** `contextMenus` (right-click item); host access to api.mymemory.translated.net only
+(the request); optional access to http/https sites (only if you enable the floating button; it reads your text
+selection and nothing else). `activeTab` and `scripting` show the panel on the page you used the menu on.
+
+**Limitations:** English only, 500-byte limit, restricted pages (chrome://, Web Store) cannot be used,
+translation quality depends on the provider, daily quota applies.
+## Productivity Coach (Progress tab)
+A local, rule-based coach. It reads your tasks and completed focus sessions and shows a daily summary,
+up to three suggestions (each with the reason it appeared), and a 7-day view once at least 7 days of data exist.
+- Runs entirely on your device: no network requests, no API key, no new permissions, nothing stored.
+- Suggestions are informational only. The coach never changes tasks, timers or settings.
+- Not a validated measurement of productivity, and focus sessions are not linked to individual tasks.
+- Weekly task counts come from tasks still in your list (deleted or reopened tasks are not counted).
+- "Today" is the local calendar day. If your timezone changes, past items are re-read in the new timezone.
+- Tests: `node tools/test-coach.js`
+## Daily Planner (Planner tab)
+Builds a proposed schedule for a time window you choose (start time, available time, longest work session,
+break length, default task length). Pending tasks are ranked: overdue first, then due today, due within 3 days,
+due later, and no due date; within each group by priority, then due date, then age. Each task is placed whole
+(split into parts with breaks if longer than the longest session). Tasks that do not fit are listed with a reason.
+- Local and deterministic: no network, no API key, no new permissions.
+- Review only: it never edits, completes or reorders tasks, and nothing is saved.
+- Tasks have no stored duration. Each uses the default length unless you enter an in-memory estimate (5-480 min),
+  which is forgotten when the popup closes. Invalid estimates fall back to the default.
+- It is a simple rule-based suggestion, not an optimal schedule. It does not know about meetings or dependencies.
+- The plan must end by midnight on the same day.
+- Tests: `node tools/test-planner.js`
+## Smart Focus Recommendations (Focus tab, "Next up")
+Suggests one pending task, up to two alternatives, and a focus session and break, with the reasons shown.
+- Uses the same ranking as the Planner (overdue, due today, due within 3 days, due later, no due date; then
+  priority, due date, age), so the two never disagree.
+- Reads your real timer state: it says so if a session or break is in progress, and names the break your timer will
+  offer next (short or long, from your settings).
+- A note about your recorded sessions appears only with at least 5 sessions on 3 days.
+- Read-only and local: no network, no new permissions, nothing stored. It does not start the timer or change tasks.
+- Tasks have no stored duration, so it never claims a task fits in one session. No productivity or health claims.
+- In development mode (`DEV_MODE`) the minutes shown come from Settings, not the short test durations.
+- Tests: `node tools/test-recommendations.js`

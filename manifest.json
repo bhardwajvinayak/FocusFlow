@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "FocusFlow - Student Productivity Companion",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tasks, a Pomodoro focus timer, quick notes and daily progress in one local-first popup.",
   "action": {
     "default_title": "FocusFlow",
@@ -23,5 +23,7 @@
     "service_worker": "service-worker.js",
     "type": "module"
   },
-  "permissions": ["storage", "alarms", "activeTab", "scripting"]
+  "permissions": ["storage", "alarms", "activeTab", "scripting", "contextMenus"],
+  "host_permissions": ["https://api.mymemory.translated.net/*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"]
 }

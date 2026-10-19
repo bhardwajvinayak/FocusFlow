@@ -18,6 +18,7 @@ export const STORAGE_KEYS = Object.freeze({
   DAILY_STATS: 'dailyStats',
   SETTINGS: 'settings',
   EYE_COMFORT: 'eyeComfort',
+  TRANSLATION: 'translation',
 });
 const ALL_KEYS = Object.values(STORAGE_KEYS);
 
@@ -65,7 +66,11 @@ export const DEFAULT_EYE_COMFORT = Object.freeze({
   remindersEnabled: false,
   reminderIntervalMinutes: 20,
 });
-
+export const DEFAULT_TRANSLATION = Object.freeze({
+  schemaVersion: SCHEMA_VERSION,
+  privacyAccepted: false, // the user has accepted the "text is sent to a third party" notice
+  floatingButton: false,  // opt-in floating Translate button (needs optional site access)
+});
 const TIMER_STATUSES = ['idle', 'running', 'paused'];
 const TIMER_MODES = ['focus', 'shortBreak', 'longBreak'];
 const THEMES = ['light', 'dark'];
@@ -82,8 +87,10 @@ export function getDefaultValue(key) {
       return { ...DEFAULT_SETTINGS };
     case STORAGE_KEYS.TIMER_STATE:
       return { ...DEFAULT_TIMER_STATE };
-    case STORAGE_KEYS.EYE_COMFORT:
+        case STORAGE_KEYS.EYE_COMFORT:
       return { ...DEFAULT_EYE_COMFORT };
+    case STORAGE_KEYS.TRANSLATION:
+      return { ...DEFAULT_TRANSLATION };
     default:
       throw new Error(`Unknown storage key: ${key}`);
   }
@@ -180,6 +187,20 @@ export function normalizeEyeComfort(raw) {
   const repaired = Object.keys(value).some((field) => value[field] !== raw[field]);
   return { value, repaired };
 }
+/** Merges stored translation preferences with defaults. Returns { value, repaired }. */
+export function normalizeTranslation(raw) {
+  if (!isPlainObject(raw)) {
+    return { value: { ...DEFAULT_TRANSLATION }, repaired: true };
+  }
+  const defaults = DEFAULT_TRANSLATION;
+  const value = {
+    schemaVersion: SCHEMA_VERSION,
+    privacyAccepted: typeof raw.privacyAccepted === 'boolean' ? raw.privacyAccepted : defaults.privacyAccepted,
+    floatingButton: typeof raw.floatingButton === 'boolean' ? raw.floatingButton : defaults.floatingButton,
+  };
+  const repaired = Object.keys(value).some((field) => value[field] !== raw[field]);
+  return { value, repaired };
+}
 /** Checks that timerState is internally consistent (status matches which fields are set). */
 export function isValidTimerState(raw) {
   if (!isPlainObject(raw)) return false;
@@ -223,6 +244,10 @@ function checkKey(key, raw) {
       return Array.isArray(raw)
         ? { value: raw, outcome: 'ok' }
         : { value: getDefaultValue(key), outcome: 'repaired' };
+        case STORAGE_KEYS.TRANSLATION: {
+      const { value, repaired } = normalizeTranslation(raw);
+      return { value, outcome: repaired ? 'repaired' : 'ok' };
+    }
     case STORAGE_KEYS.EYE_COMFORT: {
       const { value, repaired } = normalizeEyeComfort(raw);
       return { value, outcome: repaired ? 'repaired' : 'ok' };
