@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "FocusFlow - Student Productivity Companion",
+  "version": "0.2.0",
+  "description": "Tasks, a Pomodoro focus timer, quick notes and daily progress in one local-first popup.",
+  "action": {
+    "default_title": "FocusFlow",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "alarms", "activeTab", "scripting"]
+}

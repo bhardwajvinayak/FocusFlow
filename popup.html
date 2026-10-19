@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusFlow</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1 class="app-title">FocusFlow</h1>
+        <p class="app-subtitle">Student productivity companion</p>
+      </div>
+      <button id="settings-toggle" class="btn btn-small" type="button"
+              aria-expanded="false" aria-controls="panel-settings">Settings</button>
+    </header>
+
+    <div id="banner" class="banner" role="status" hidden>
+      <span id="banner-text"></span>
+      <button id="banner-dismiss" class="banner-dismiss" type="button" aria-label="Dismiss message">&times;</button>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="FocusFlow sections">
+      <button id="tab-tasks" class="tab" role="tab" type="button" data-tab="tasks"
+              aria-selected="true" aria-controls="panel-tasks" tabindex="0">Tasks</button>
+      <button id="tab-focus" class="tab" role="tab" type="button" data-tab="focus"
+              aria-selected="false" aria-controls="panel-focus" tabindex="-1">Focus</button>
+      <button id="tab-notes" class="tab" role="tab" type="button" data-tab="notes"
+              aria-selected="false" aria-controls="panel-notes" tabindex="-1">Notes</button>
+      <button id="tab-progress" class="tab" role="tab" type="button" data-tab="progress"
+              aria-selected="false" aria-controls="panel-progress" tabindex="-1">Progress</button>
+      <button id="tab-eye" class="tab" role="tab" type="button" data-tab="eye"
+              aria-selected="false" aria-controls="panel-eye" tabindex="-1">Eyes</button>
+    </nav>
+
+    <main class="content">
+           <!-- ============ Tasks ============ -->
+      <section id="panel-tasks" class="panel" role="tabpanel" aria-labelledby="tab-tasks">
+        <form id="task-form" class="task-form" novalidate>
+          <fieldset id="task-fields" class="plain-fieldset" disabled>
+            <div class="quick-add">
+              <label class="visually-hidden" for="task-title">Task title</label>
+              <input id="task-title" class="text-input" type="text" maxlength="200"
+                     placeholder="Quick add: what do you need to do?" autocomplete="off"
+                     aria-describedby="task-form-error" />
+              <button id="task-add" class="btn btn-primary" type="submit">Add</button>
+            </div>
+
+            <details id="task-more" class="task-more">
+              <summary>More options</summary>
+              <div class="task-more-grid">
+                <label class="field-label" for="task-description">Description (optional)</label>
+                <textarea id="task-description" class="text-area" rows="2" maxlength="500"></textarea>
+
+                <div class="task-more-row">
+                  <div>
+                    <label class="field-label" for="task-priority">Priority</label>
+                    <select id="task-priority" class="text-input">
+                      <option value="high">High</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="field-label" for="task-category">Category</label>
+                    <input id="task-category" class="text-input" type="text" maxlength="30"
+                           list="task-categories" autocomplete="off" placeholder="e.g. DBMS" />
+                  </div>
+                </div>
+
+                <div class="task-more-row">
+                  <div>
+                    <label class="field-label" for="task-due">Due date</label>
+                    <input id="task-due" class="text-input" type="date" />
+                  </div>
+                  <div>
+                    <label class="field-label" for="task-recurrence">Repeat</label>
+                    <select id="task-recurrence" class="text-input">
+                      <option value="none" selected>Does not repeat</option>
+                      <option value="daily">Repeats daily</option>
+                      <option value="weekly">Repeats weekly</option>
+                      <option value="monthly">Repeats monthly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </fieldset>
+          <datalist id="task-categories"></datalist>
+          <p id="task-form-error" class="field-error" role="alert" hidden></p>
+        </form>
+
+        <div id="task-progress" class="daily-progress" hidden>
+          <p id="task-progress-text" class="daily-progress-text" aria-live="polite"></p>
+          <progress id="task-progress-bar" max="100" value="0" aria-label="Today's task progress"></progress>
+        </div>
+
+        <div class="task-toolbar">
+          <label class="visually-hidden" for="task-search">Search tasks</label>
+          <input id="task-search" class="text-input" type="search" placeholder="Search tasks" autocomplete="off" />
+          <label class="visually-hidden" for="task-sort">Sort tasks</label>
+          <select id="task-sort" class="text-input task-sort">
+            <option value="newest" selected>Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="due">Due date</option>
+            <option value="priority">Priority</option>
+          </select>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter tasks">
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="filter" data-filter="pending" aria-pressed="false">Pending</button>
+          <button type="button" class="filter" data-filter="completed" aria-pressed="false">Completed</button>
+          <button type="button" class="filter" data-filter="overdue" aria-pressed="false">Overdue</button>
+        </div>
+
+        <p id="task-summary" class="task-summary" aria-live="polite"></p>
+
+        <ul id="task-list" class="task-list" aria-label="Tasks"></ul>
+
+        <div id="task-empty" class="empty-state">
+          <h2 id="task-empty-title">Loading tasks&hellip;</h2>
+          <p id="task-empty-text"></p>
+        </div>
+      </section>
+
+      <!-- ============ Focus ============ -->
+      <section id="panel-focus" class="panel" role="tabpanel" aria-labelledby="tab-focus" hidden>
+        <p id="focus-dev" class="dev-badge" hidden></p>
+
+        <div id="focus-modes" class="mode-switch" role="group" aria-label="Timer mode">
+          <button type="button" class="mode-btn" data-mode="focus" aria-pressed="true">Focus</button>
+          <button type="button" class="mode-btn" data-mode="shortBreak" aria-pressed="false">Short break</button>
+          <button type="button" class="mode-btn" data-mode="longBreak" aria-pressed="false">Long break</button>
+        </div>
+
+        <div class="timer-card">
+          <div id="timer-time" class="timer-time" role="timer" aria-label="Time remaining">25:00</div>
+          <p id="timer-status" class="timer-status" aria-live="polite">Loading timer&hellip;</p>
+        </div>
+
+        <div class="timer-controls">
+          <button id="timer-primary" class="btn btn-primary btn-large" type="button" disabled>Start</button>
+          <button id="timer-reset" class="btn btn-large" type="button" disabled>Reset</button>
+        </div>
+
+        <p id="timer-cycle" class="timer-meta"></p>
+        <p id="timer-today" class="timer-meta"></p>
+      </section>
+
+      <!-- ============ Notes ============ -->
+      <section id="panel-notes" class="panel" role="tabpanel" aria-labelledby="tab-notes" hidden>
+        <div id="note-list-view">
+          <div class="notes-toolbar">
+            <button id="note-new" class="btn btn-primary" type="button" disabled>New note</button>
+          </div>
+          <ul id="note-list" class="note-list" aria-label="Notes"></ul>
+          <div id="note-empty" class="empty-state">
+            <h2 id="note-empty-title">Loading notes&hellip;</h2>
+            <p id="note-empty-text"></p>
+          </div>
+        </div>
+
+        <div id="note-editor-view" hidden>
+          <div class="notes-toolbar">
+            <button id="note-back" class="btn btn-small" type="button">Back to notes</button>
+            <span id="note-status" class="save-status" role="status" aria-live="polite"></span>
+          </div>
+
+          <label class="field-label" for="note-title">Title</label>
+          <input id="note-title" class="text-input" type="text" maxlength="100" autocomplete="off" />
+
+          <label class="field-label" for="note-content">Content</label>
+          <textarea id="note-content" class="text-area" rows="7" maxlength="10000"></textarea>
+          <p id="note-counter" class="field-hint"></p>
+
+          <p id="note-error" class="field-error" role="alert" hidden></p>
+
+          <div class="note-actions">
+            <button id="note-delete" class="btn btn-small" type="button">Delete note</button>
+            <div id="note-confirm" class="note-confirm" hidden>
+              <p class="confirm-text">Delete this note permanently? This cannot be undone.</p>
+              <button id="note-confirm-yes" class="btn btn-small btn-danger" type="button">Delete</button>
+              <button id="note-confirm-no" class="btn btn-small" type="button">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Progress ============ -->
+      <section id="panel-progress" class="panel" role="tabpanel" aria-labelledby="tab-progress" hidden>
+        <p id="progress-empty" class="empty-hint" hidden>
+          No activity yet. Add tasks or finish a focus session and your progress will appear here.
+        </p>
+
+        <h2 class="stat-heading">Today <span id="progress-date" class="stat-date"></span></h2>
+        <div class="stat-grid">
+          <div class="stat-card"><span id="stat-today-tasks" class="stat-value">0</span><span class="stat-label">Tasks completed</span></div>
+          <div class="stat-card"><span id="stat-today-sessions" class="stat-value">0</span><span class="stat-label">Focus sessions</span></div>
+          <div class="stat-card"><span id="stat-today-minutes" class="stat-value">0</span><span class="stat-label">Focus minutes</span></div>
+        </div>
+
+        <h2 class="stat-heading">Tasks (all)</h2>
+        <div class="stat-grid">
+          <div class="stat-card"><span id="stat-total" class="stat-value">0</span><span class="stat-label">Total</span></div>
+          <div class="stat-card"><span id="stat-completed" class="stat-value">0</span><span class="stat-label">Completed</span></div>
+          <div class="stat-card"><span id="stat-pending" class="stat-value">0</span><span class="stat-label">Pending</span></div>
+        </div>
+        <div class="progress-row">
+          <progress id="stat-bar" max="100" value="0" aria-label="Task completion"></progress>
+          <span id="stat-percent" class="progress-percent">0%</span>
+        </div>
+
+        <h2 class="stat-heading">All time</h2>
+        <div class="stat-grid">
+          <div class="stat-card"><span id="stat-all-sessions" class="stat-value">0</span><span class="stat-label">Focus sessions</span></div>
+          <div class="stat-card"><span id="stat-all-minutes" class="stat-value">0</span><span class="stat-label">Focus minutes</span></div>
+          <div class="stat-card"><span id="stat-all-days" class="stat-value">0</span><span class="stat-label">Active days</span></div>
+        </div>
+
+        <p id="progress-error" class="field-error" role="alert" hidden></p>
+      </section>      <!-- ============ Eye comfort ============ -->
+      <section id="panel-eye" class="panel" role="tabpanel" aria-labelledby="tab-eye" hidden>
+        <h2 class="panel-heading">Eye comfort</h2>
+        <p class="field-hint">
+          These tools change how a webpage looks on your screen. They cannot change your monitor's
+          real brightness, and they cannot promise to prevent eye strain.
+        </p>
+
+        <p id="eye-page-status" class="eye-page-status" role="status" aria-live="polite">Checking the current page&hellip;</p>
+        <p id="eye-page-error" class="field-error" role="alert" hidden></p>
+
+        <fieldset class="eye-group">
+          <legend>Warm screen filter</legend>
+          <label class="switch-row" for="eye-filter-toggle">
+            <input id="eye-filter-toggle" type="checkbox" disabled />
+            <span>Warm filter on this page</span>
+          </label>
+          <div class="slider-row">
+            <label for="eye-filter-intensity">Strength</label>
+            <input id="eye-filter-intensity" type="range" min="10" max="60" step="5" value="30" />
+            <output id="eye-filter-value" for="eye-filter-intensity">30%</output>
+          </div>
+          <button id="eye-filter-remove" class="btn btn-small" type="button" disabled>Remove filter</button>
+          <p class="field-hint">
+            Applies to the current tab only. It does not block clicks, typing or scrolling. It is removed when
+            the page reloads or you navigate away, and it does not tint full-screen video.
+          </p>
+        </fieldset>
+
+        <fieldset class="eye-group">
+          <legend>Reading mode</legend>
+          <label class="switch-row" for="eye-reading-toggle">
+            <input id="eye-reading-toggle" type="checkbox" disabled />
+            <span>Reading colours on this page</span>
+          </label>
+          <p id="eye-reading-message" class="field-hint" role="status" aria-live="polite"></p>
+          <p class="field-hint">
+            Sets a soft page background and dark-brown text. Pages that already use a dark background are
+            skipped. Images, forms and links are not restyled.
+          </p>
+        </fieldset>
+
+        <fieldset class="eye-group">
+          <legend>Screen-break reminders</legend>
+          <p id="eye-dev" class="dev-badge" hidden></p>
+          <label class="switch-row" for="eye-reminder-toggle">
+            <input id="eye-reminder-toggle" type="checkbox" />
+            <span>Remind me to take screen breaks</span>
+          </label>
+          <div class="slider-row">
+            <label for="eye-reminder-interval">Every</label>
+            <select id="eye-reminder-interval" class="text-input"></select>
+          </div>
+          <p id="eye-reminder-status" class="field-hint" role="status" aria-live="polite"></p>
+          <p id="eye-reminder-error" class="field-error" role="alert" hidden></p>
+          <p class="field-hint">
+            Reminders follow the interval you choose. FocusFlow does not measure your actual screen time.
+            When one is due, a BREAK badge appears on the toolbar icon, and the message shows when you open
+            FocusFlow. Reminders only run while Chrome is open.
+          </p>
+        </fieldset>
+      </section>
+
+      <!-- ============ Settings (opened from the header button; not a tab) ============ -->
+      <section id="panel-settings" class="panel" aria-labelledby="settings-heading" hidden>
+        <h2 id="settings-heading" class="panel-heading">Settings</h2>
+        <p id="settings-dev" class="dev-badge" hidden>
+          Development mode is ON, so the durations below are ignored. Set DEV_MODE to false in js/config.js.
+        </p>
+
+        <form id="settings-form" novalidate>
+          <div class="settings-grid">
+            <label for="set-focus">Focus (minutes)</label>
+            <input id="set-focus" class="text-input" type="number" inputmode="numeric" />
+            <label for="set-short">Short break (minutes)</label>
+            <input id="set-short" class="text-input" type="number" inputmode="numeric" />
+            <label for="set-long">Long break (minutes)</label>
+            <input id="set-long" class="text-input" type="number" inputmode="numeric" />
+            <label for="set-sessions">Sessions before long break</label>
+            <input id="set-sessions" class="text-input" type="number" inputmode="numeric" />
+            <label for="set-theme">Theme</label>
+            <select id="set-theme" class="text-input">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+          <p id="settings-error" class="field-error" role="alert" hidden></p>
+          <button id="settings-save" class="btn btn-primary" type="submit">Save settings</button>
+        </form>
+
+        <div class="danger-zone">
+          <h3>Reset all data</h3>
+          <p class="field-hint">
+            Permanently deletes every task, note, timer state, statistic and setting stored by FocusFlow on this device.
+          </p>
+          <button id="reset-start" class="btn btn-danger-outline" type="button">Reset all data&hellip;</button>
+          <div id="reset-confirm" class="note-confirm" hidden>
+            <label class="field-label" for="reset-input">Type DELETE to confirm</label>
+            <input id="reset-input" class="text-input" type="text" autocomplete="off" />
+            <div class="reset-buttons">
+              <button id="reset-confirm-btn" class="btn btn-danger" type="button" disabled>Delete everything</button>
+              <button id="reset-cancel" class="btn" type="button">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span id="storage-status">Starting FocusFlow&hellip;</span>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
