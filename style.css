@@ -1368,3 +1368,240 @@ progress:focus-visible {
 .wr-table td:nth-child(3) {
   text-align: right;
 }
+/* ================================================================== */
+/* Phase 9: Habits                                                     */
+/* ================================================================== */
+
+.hb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hb-item {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.hb-item.is-archived {
+  border-left-color: var(--border);
+}
+
+.hb-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hb-name {
+  flex: 1 1 120px;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.hb-edit {
+  flex: 1 1 100%;
+}
+
+.hb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.hb-stats {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.hb-milestones {
+  margin: 2px 0 0;
+}
+
+.hb-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hb-badge {
+  padding: 1px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hb-next {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.hb-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+}
+
+.hb-confirm .confirm-text {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--text);
+}
+
+.hb-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.hb-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 52px;
+  padding: 3px 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hb-day:hover {
+  border-color: var(--accent);
+}
+
+.hb-day.is-today:not(.is-done) {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.hb-day.is-done {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.hb-day-name {
+  font-size: 10px;
+}
+
+.hb-day-num {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hb-day-state {
+  font-size: 10px;
+}
+
+.hb-history {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.hb-history summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.hb-cal {
+  width: 100%;
+  margin-top: 6px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-size: 10px;
+}
+
+.hb-cal th {
+  font-weight: 600;
+  text-align: center;
+  color: var(--muted);
+}
+
+.hb-cal th[scope="row"] {
+  width: 46px;
+  text-align: left;
+  font-weight: 400;
+}
+
+.hb-cal-caption {
+  caption-side: top;
+  padding-bottom: 2px;
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.hb-cell {
+  height: 24px;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hb-done {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+
+.hb-not-done {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.hb-before-start {
+  color: var(--muted);
+  background: repeating-linear-gradient(45deg, transparent, transparent 4px, var(--border) 4px, var(--border) 5px);
+}
+
+.hb-upcoming {
+  border-style: dashed;
+  background: transparent;
+  color: var(--muted);
+}
+
+.hb-warning {
+  margin: 6px 0;
+  padding: 6px 8px;
+  border: 1px solid var(--warning);
+  border-radius: 6px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 12px;
+}

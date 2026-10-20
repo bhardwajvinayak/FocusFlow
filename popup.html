@@ -270,7 +270,33 @@
       </section>
 
       <!-- ============ Progress ============ -->
-      <section id="panel-progress" class="panel" role="tabpanel" aria-labelledby="tab-progress" hidden>        <div id="coach-card" class="coach-card" role="region" aria-labelledby="coach-heading">
+      <section id="panel-progress" class="panel" role="tabpanel" aria-labelledby="tab-progress" hidden>
+                <div id="hb-card" class="coach-card" role="region" aria-labelledby="hb-heading">
+          <h3 id="hb-heading" class="coach-heading">Habits</h3>
+          <p class="field-hint">
+            Tick a habit for today or any of the previous six days. A streak counts consecutive days you marked
+            done. Days before you added a habit are never counted as missed.
+          </p>
+          <form id="hb-form" novalidate>
+            <label class="visually-hidden" for="hb-name">New habit name</label>
+            <div class="quick-add">
+              <input id="hb-name" class="text-input" type="text" maxlength="40" autocomplete="off"
+                     placeholder="New habit, for example: Read 10 pages" aria-describedby="hb-error" disabled />
+              <button id="hb-add" class="btn btn-primary" type="submit" disabled>Add</button>
+            </div>
+          </form>
+          <p id="hb-error" class="field-error" role="alert" hidden></p>
+          <p id="hb-count" class="field-hint"></p>
+          <p id="hb-status" class="field-hint" role="status" aria-live="polite"></p>
+          <p id="hb-warning" class="hb-warning" hidden></p>
+          <p id="hb-empty" class="coach-empty">Loading habits&hellip;</p>
+          <ul id="hb-list" class="hb-list" aria-label="Active habits"></ul>
+          <details id="hb-archived" class="task-more" hidden>
+            <summary id="hb-archived-summary">Archived habits</summary>
+            <ul id="hb-archived-list" class="hb-list" aria-label="Archived habits"></ul>
+          </details>
+        </div>        
+        <div id="coach-card" class="coach-card" role="region" aria-labelledby="coach-heading">
           <h3 id="coach-heading" class="coach-heading">Coach</h3>
           <p class="field-hint">
             Suggestions are calculated on this device from your own tasks and focus sessions, using fixed rules.
