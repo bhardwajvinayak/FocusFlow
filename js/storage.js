@@ -3,6 +3,7 @@
 // It owns: storage keys, default values, validation, repair, and the local-date helper.
 
 import { DEFAULT_GOALS, normalizeStoredGoals } from './goals.js';
+import { HABITS_SCHEMA_VERSION, normalizeHabitsContainer } from './habits.js';
 /** Error type so the UI can tell storage failures apart from other bugs. */
 export class StorageError extends Error {
   constructor(message, cause) {
@@ -21,6 +22,7 @@ export const STORAGE_KEYS = Object.freeze({
   EYE_COMFORT: 'eyeComfort',
   TRANSLATION: 'translation',
   GOALS: 'goals',
+  HABITS: 'habits',
 });
 const ALL_KEYS = Object.values(STORAGE_KEYS);
 
@@ -95,6 +97,8 @@ export function getDefaultValue(key) {
       return { ...DEFAULT_TRANSLATION };
     case STORAGE_KEYS.GOALS:
       return { ...DEFAULT_GOALS };
+    case STORAGE_KEYS.HABITS:
+      return { schemaVersion: HABITS_SCHEMA_VERSION, habits: [] }; // fresh array every time (never shared)
     default:
       throw new Error(`Unknown storage key: ${key}`);
   }
@@ -248,7 +252,13 @@ function checkKey(key, raw) {
       return Array.isArray(raw)
         ? { value: raw, outcome: 'ok' }
         : { value: getDefaultValue(key), outcome: 'repaired' };
-        case STORAGE_KEYS.GOALS: {
+            case STORAGE_KEYS.HABITS: {
+      // Container check only. Individual habits are validated by cleanHabits() in js/habits.js,
+      // so a startup repair never rewrites (and never silently drops) a habit record.
+      const { value, repaired } = normalizeHabitsContainer(raw);
+      return { value, outcome: repaired ? 'repaired' : 'ok' };
+    }
+    case STORAGE_KEYS.GOALS: {
       const { value, repaired } = normalizeStoredGoals(raw);
       return { value, outcome: repaired ? 'repaired' : 'ok' };
     }
