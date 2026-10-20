@@ -5,6 +5,7 @@ import { loadStats } from './statistics.js';
 import { refreshCoachUI } from './ui-coach.js';
 import { refreshFocusIntelligenceUI } from './ui-focus-intelligence.js';
 import { refreshGoalsUI } from './ui-goals.js';
+import { refreshInsightsUI } from './ui-insights.js';
 import { refreshHabitsUI } from './ui-habits.js';
 const $ = (id) => document.getElementById(id);
 
@@ -57,6 +58,7 @@ export async function refreshProgressUI() {
     void refreshFocusIntelligenceUI(); // independent: this card can never break the statistics
     void refreshGoalsUI(); // independent: goals and reports can never break the statistics
     void refreshHabitsUI(); // independent: habits can never break the statistics
+        void refreshInsightsUI(); // independent: insights and export can never break the statistics
     els.error.hidden = true;
   } catch (error) {
     console.error('[FocusFlow] Could not load statistics:', error);

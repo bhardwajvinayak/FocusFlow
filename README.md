@@ -227,3 +227,14 @@ Suggests one pending task, up to two alternatives, and a focus session and break
 - **Limits:** history before your first recorded activity is unknown; sessions are not linked to tasks; deleted tasks
   leave no trace; goals are not versioned over time.
 - Tests: `node tools/test-goals.js`, `node tools/test-report.js`
+## Weekly productivity insights and export (Progress tab)
+A "Weekly insights and export" card combines focus time (same numbers as the weekly report), tasks completed and
+habit check-ins for one Monday-to-Sunday week (local time). Weeks before your history are unavailable, a dash means
+no data (not 0), and comparisons need history back to last Monday plus data in both periods.
+- Task counts include only tasks still in your list. Habit numbers cover active habits from the day each was added.
+- "Most productive day" = the day with the most focus minutes (needs 3 active days).
+- CSV (`focusflow-productivity-START_to_END.csv`): date, weekday, status, focus_minutes, sessions, tasks_completed,
+  habits_done, habits_tracked. PDF: one A4 page with a summary, a bar chart and the daily table. Both are weekly,
+  built locally, and contain totals only (no habit names, task titles or notes). The PDF uses a built-in
+  Latin-1 font, so unsupported characters print as "?".
+- No network, no new permissions, nothing is stored. Tests: `node tools/test-insights.js`, `node tools/test-report-export.js`

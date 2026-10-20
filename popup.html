@@ -358,6 +358,26 @@
           <p id="wr-status" class="field-hint" role="status" aria-live="polite"></p>
           <p id="wr-error" class="field-error" role="alert" hidden></p>
         </div>
+                <div id="in-card" class="coach-card" role="region" aria-labelledby="in-heading">
+          <h3 id="in-heading" class="coach-heading">Weekly insights and export</h3>
+          <p class="field-hint">
+            Focus, tasks and habits for one Monday-to-Sunday week, calculated on this device. A dash means no data,
+            which is different from 0.
+          </p>
+          <label class="field-label" for="in-week">Week</label>
+          <select id="in-week" class="text-input"></select>
+          <p id="in-label" class="coach-sub"></p>
+          <ul id="in-lines" class="rec-list" aria-label="Weekly insights"></ul>
+          <table id="in-days" class="fi-heatmap wr-table"></table>
+          <ul id="in-habits" class="rec-list" aria-label="Habit check-ins this week"></ul>
+          <p id="in-note" class="field-hint"></p>
+          <div class="planner-actions">
+            <button id="in-csv" class="btn" type="button" disabled>Download CSV</button>
+            <button id="in-pdf" class="btn" type="button" disabled>Download PDF</button>
+          </div>
+          <p id="in-status" class="field-hint" role="status" aria-live="polite"></p>
+          <p id="in-error" class="field-error" role="alert" hidden></p>
+        </div>
           <div id="fi-card" class="coach-card" role="region" aria-labelledby="fi-heading">
           <h3 id="fi-heading" class="coach-heading">Focus history</h3>
           <p class="field-hint">
