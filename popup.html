@@ -288,7 +288,65 @@
         <p id="progress-empty" class="empty-hint" hidden>
           No activity yet. Add tasks or finish a focus session and your progress will appear here.
         </p>
+                <div id="gl-card" class="coach-card" role="region" aria-labelledby="gl-heading">
+          <h3 id="gl-heading" class="coach-heading">Goals and achievements</h3>
+          <p class="field-hint">
+            Goals are optional. Leave a box empty for no goal. Progress always uses the goals you have set now:
+            changing a goal changes how past days are judged.
+          </p>
+          <form id="gl-form" novalidate>
+            <div class="gl-grid">
+              <label for="gl-daily">Daily focus (minutes)</label>
+              <input id="gl-daily" class="text-input" type="text" inputmode="numeric" autocomplete="off" />
+              <label for="gl-weekly">Weekly focus (minutes)</label>
+              <input id="gl-weekly" class="text-input" type="text" inputmode="numeric" autocomplete="off" />
+              <label for="gl-sessions">Daily sessions</label>
+              <input id="gl-sessions" class="text-input" type="text" inputmode="numeric" autocomplete="off" />
+            </div>
+            <p id="gl-error" class="field-error" role="alert" hidden></p>
+            <div class="planner-actions">
+              <button id="gl-save" class="btn btn-primary" type="submit">Save goals</button>
+              <button id="gl-clear" class="btn" type="button">Clear all goals</button>
+            </div>
+          </form>
+          <p id="gl-status" class="field-hint" role="status" aria-live="polite"></p>
+          <ul id="gl-progress" class="gl-list" aria-label="Goal progress"></ul>
+          <h4 class="coach-sub">Achievements</h4>
+          <p id="gl-ach-summary" class="field-hint"></p>
+          <ul id="gl-achievements" class="gl-list" aria-label="Achievements"></ul>
+        </div>
 
+        <div id="wr-card" class="coach-card" role="region" aria-labelledby="wr-heading">
+          <h3 id="wr-heading" class="coach-heading">Weekly report</h3>
+          <p class="field-hint">Built from completed focus sessions on this device. Weeks run Monday to Sunday in local time.</p>
+          <label class="field-label" for="wr-week">Week</label>
+          <select id="wr-week" class="text-input"></select>
+          <p id="wr-label" class="coach-sub"></p>
+          <ul id="wr-summary" class="rec-list" aria-label="Report summary"></ul>
+          <table id="wr-days" class="fi-heatmap wr-table"></table>
+          <ul id="wr-goals" class="rec-list" aria-label="Goal progress for this week"></ul>
+          <p id="wr-note" class="field-hint"></p>
+          <div class="planner-actions">
+            <button id="wr-download" class="btn" type="button">Download week as CSV</button>
+          </div>
+          <p id="wr-status" class="field-hint" role="status" aria-live="polite"></p>
+          <p id="wr-error" class="field-error" role="alert" hidden></p>
+        </div>
+          <div id="fi-card" class="coach-card" role="region" aria-labelledby="fi-heading">
+          <h3 id="fi-heading" class="coach-heading">Focus history</h3>
+          <p class="field-hint">
+            Built from your completed focus sessions, on this device. Weeks run Monday to Sunday in local time.
+            Sessions you reset or abandon are never recorded.
+          </p>
+          <ul id="fi-metrics" class="coach-indicators" aria-label="Focus totals"></ul>
+          <p id="fi-compare" class="field-hint"></p>
+          <h4 class="coach-sub">Insights</h4>
+          <ul id="fi-insights" class="coach-recs" aria-label="Focus insights"></ul>
+          <h4 class="coach-sub">Last 4 weeks</h4>
+          <table id="fi-heatmap" class="fi-heatmap"></table>
+          <p id="fi-heatmap-note" class="field-hint"></p>
+          <p id="fi-error" class="field-error" role="alert" hidden></p>
+        </div>
         <h2 class="stat-heading">Today <span id="progress-date" class="stat-date"></span></h2>
         <div class="stat-grid">
           <div class="stat-card"><span id="stat-today-tasks" class="stat-value">0</span><span class="stat-label">Tasks completed</span></div>

@@ -2,6 +2,7 @@
 // Persistence layer. Every read and write of chrome.storage.local goes through this file.
 // It owns: storage keys, default values, validation, repair, and the local-date helper.
 
+import { DEFAULT_GOALS, normalizeStoredGoals } from './goals.js';
 /** Error type so the UI can tell storage failures apart from other bugs. */
 export class StorageError extends Error {
   constructor(message, cause) {
@@ -19,6 +20,7 @@ export const STORAGE_KEYS = Object.freeze({
   SETTINGS: 'settings',
   EYE_COMFORT: 'eyeComfort',
   TRANSLATION: 'translation',
+  GOALS: 'goals',
 });
 const ALL_KEYS = Object.values(STORAGE_KEYS);
 
@@ -91,6 +93,8 @@ export function getDefaultValue(key) {
       return { ...DEFAULT_EYE_COMFORT };
     case STORAGE_KEYS.TRANSLATION:
       return { ...DEFAULT_TRANSLATION };
+    case STORAGE_KEYS.GOALS:
+      return { ...DEFAULT_GOALS };
     default:
       throw new Error(`Unknown storage key: ${key}`);
   }
@@ -244,7 +248,11 @@ function checkKey(key, raw) {
       return Array.isArray(raw)
         ? { value: raw, outcome: 'ok' }
         : { value: getDefaultValue(key), outcome: 'repaired' };
-        case STORAGE_KEYS.TRANSLATION: {
+        case STORAGE_KEYS.GOALS: {
+      const { value, repaired } = normalizeStoredGoals(raw);
+      return { value, outcome: repaired ? 'repaired' : 'ok' };
+    }
+    case STORAGE_KEYS.TRANSLATION: {
       const { value, repaired } = normalizeTranslation(raw);
       return { value, outcome: repaired ? 'repaired' : 'ok' };
     }

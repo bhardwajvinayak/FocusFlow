@@ -209,3 +209,21 @@ Suggests one pending task, up to two alternatives, and a focus session and break
 - Tasks have no stored duration, so it never claims a task fits in one session. No productivity or health claims.
 - In development mode (`DEV_MODE`) the minutes shown come from Settings, not the short test durations.
 - Tests: `node tools/test-recommendations.js`
+## Goals, Achievements and Weekly Report (Progress tab)
+- **Goals (optional):** daily focus minutes (whole number 5-720), weekly focus minutes (15-5040), daily sessions (1-24).
+  Weekly must be at least the daily focus goal. Blank/non-numeric/fractional/zero/negative/out-of-range input is
+  rejected and nothing is saved. Unset goals show "Set a goal", never a percentage. Goals persist in the `goals`
+  storage key and are cleared by "Reset all data". Progress uses the goal currently set; changing a goal changes how past
+  days are judged. Weekly progress is week to date (Monday through today, local time). Over-goal shows the true total.
+- **Achievements** (computed each time from completed sessions, never stored): first session, 10 sessions, 50 sessions,
+  300 focus minutes, 3-day and 7-day streaks of consecutive local days, daily goal met, weekly goal met (the last two
+  need a goal). Each shows its criterion and, when earned, the earliest date it was reached.
+- **Weekly report:** pick the current week (to date) or an earlier week within your recorded history (up to 52 weeks).
+  Shows minutes, sessions, average, active days, best day (needs 3 active days), daily rows, goal progress and a
+  comparison with the same weekdays of the previous week (only when history covers it). Days are "recorded",
+  "none" (inside your history but empty) or "unavailable" (before your history, or not yet happened).
+- **CSV export:** `focusflow-week-YYYY-MM-DD.csv` (the Monday), header `date,weekday,focus_minutes,sessions,status` plus
+  seven rows. Unavailable days have blank minutes/sessions. No task titles or notes. No permissions or network needed.
+- **Limits:** history before your first recorded activity is unknown; sessions are not linked to tasks; deleted tasks
+  leave no trace; goals are not versioned over time.
+- Tests: `node tools/test-goals.js`, `node tools/test-report.js`

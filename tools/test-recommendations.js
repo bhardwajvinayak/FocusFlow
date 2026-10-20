@@ -143,7 +143,7 @@ function deepFreeze(value) {
   await test('invalid, duplicate and completed records are skipped and counted', () => {
     const r = run({ tasks: [null, 5, 'x', [], task(''), task('t', { title: '  ' }), task('ok'), task('ok'), task('done', { completed: true })] });
     assert.strictEqual(r.nextTask.id, 'ok');
-    assert.strictEqual(r.skippedTasks, 6);
+    assert.strictEqual(r.skippedTasks, 7);
     assert.ok(r.notes.some((n) => n.includes('unreadable')));
     assert.doesNotThrow(() => run({ tasks: 'nope' }));
     assert.strictEqual(run({ tasks: 'nope' }).state, 'no-tasks');

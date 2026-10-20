@@ -347,3 +347,6 @@ export function computeFocusIntelligence({ sessions = [], now = new Date(), evid
   result.insights = buildInsights(result);
   return result;
 }
+
+// Shared with js/goals.js and js/report.js so day and week logic stays in one place.
+export { keyOf, isValidKey, shiftKey, dayNumber, mondayOf, keyFromTimestamp, cleanSessions };

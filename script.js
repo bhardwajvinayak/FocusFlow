@@ -57,7 +57,10 @@ function hideBanner() {
 
 const modules = {
   focus: { started: false, refresh: refreshFocusUI },
-  eye: { started: false, refresh: refreshEyeUI },     recommendations: { started: false, refresh: refreshRecommendationsUI }, translation: { started: false, refresh: refreshTranslationUI },
+  eye: { started: false, refresh: refreshEyeUI },
+  recommendations: { started: false, refresh: refreshRecommendationsUI },
+  translation: { started: false, refresh: refreshTranslationUI },
+  planner: { started: false, refresh: refreshPlannerUI },
   notes: { started: false, refresh: refreshNotesUI },
   progress: { started: false, refresh: refreshProgressUI },
   settings: { started: false, refresh: refreshSettingsUI },
