@@ -124,13 +124,16 @@ const ts = (m, d, h = 12) => new Date(2026, m - 1, d, h).getTime();
     assert.deepStrictEqual(Array.from(x.buildProductivityPdf(insights, { generatedAt: NOW })), Array.from(x.buildProductivityPdf(insights, { generatedAt: NOW })));
   });
 
-  await test('export modules make no network, storage or browser API calls', () => {
-    for (const f of ['report-export.js', 'insights.js']) {
+    await test('export modules make no network, storage or browser API calls (code only, comments ignored)', () => {
+    const allowed = { 'report-export.js': ['./report.js'], 'insights.js': ['./focus-intelligence.js', './habits.js', './report.js'] };
+    for (const [f, imports] of Object.entries(allowed)) {
       const src = fs.readFileSync(path.join(__dirname, '..', 'js', f), 'utf8');
-      assert.ok(!/(fetch\(|XMLHttpRequest|chrome\.|localStorage|document\.|import\(|https?:\/\/)/.test(src), f);
+      const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
+      assert.ok(!/(fetch\(|XMLHttpRequest|chrome\.|localStorage|document\.|import\(|https?:\/\/)/.test(code), f);
+      const found = [...code.matchAll(/^\s*import\s[^'"]*['"]([^'"]+)['"]/gm)].map((m) => m[1]).sort();
+      assert.deepStrictEqual(found, imports, `${f} imports`);
     }
   });
-
   fs.rmSync(dir, { recursive: true, force: true });
   console.log(`\n${passed} test(s) passed${process.exitCode ? ', some FAILED' : ''}.`);
 })();

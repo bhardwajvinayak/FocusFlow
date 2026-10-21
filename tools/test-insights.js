@@ -131,8 +131,14 @@ function deepFreeze(v) {
     const r = buildProductivityInsights({ sessions: [{ id: 'a', durationSeconds: 1500, completedAt: new Date(2025, 11, 31, 12).getTime() }], now: new Date(2026, 0, 1, 12), weekStart: '2025-12-29' });
     assert.deepStrictEqual(r.days.map((d) => d.date).slice(2, 4), ['2025-12-31', '2026-01-01']);
     assert.strictEqual(r.days[2].minutes, 25);
-    const early = build({ weekStart: '2026-09-28' });
-    assert.ok(early.days.every((d) => d.status === 'unavailable'));
+        // The fixture's earliest activity is 1 Oct, so the week of 28 Sep is only PARTLY before history:
+    const partial = build({ weekStart: '2026-09-28' });
+    assert.deepStrictEqual(partial.days.map((d) => d.status), ['unavailable', 'unavailable', 'unavailable', 'none', 'none', 'none', 'none']);
+    assert.deepStrictEqual(partial.days.map((d) => d.minutes), [null, null, null, 0, 0, 0, 0]); // no data is null, a real zero stays 0
+    // The week before that is entirely before history:
+    const early = build({ weekStart: '2026-09-21' });
+    assert.ok(early.days.every((d) => d.status === 'unavailable' && d.reason === 'before-history'));
+    assert.ok(early.days.every((d) => d.minutes === null && d.tasksCompleted === null && d.habitsTracked === null));
     assert.ok(early.lines.some((l) => l.id === 'no-history'));
   });
 
@@ -146,9 +152,12 @@ function deepFreeze(v) {
     assert.strictEqual(JSON.stringify({ s, t, h }), before);
   });
 
-  await test('the module has no storage, network or browser API calls', () => {
+  await test('the module has no storage, network or browser API calls (code only, comments ignored)', () => {
     const src = fs.readFileSync(path.join(__dirname, '..', 'js', 'insights.js'), 'utf8');
-    assert.ok(!/(fetch\(|XMLHttpRequest|chrome\.|localStorage|document\.)/.test(src));
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
+    assert.ok(!/(fetch\(|XMLHttpRequest|chrome\.|localStorage|document\.|import\(|https?:\/\/)/.test(code));
+    const imports = [...code.matchAll(/^\s*import\s[^'"]*['"]([^'"]+)['"]/gm)].map((m) => m[1]).sort();
+    assert.deepStrictEqual(imports, ['./focus-intelligence.js', './habits.js', './report.js']);
   });
 
   await test('wording is neutral', () => {
